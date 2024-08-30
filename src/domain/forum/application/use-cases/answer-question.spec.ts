@@ -11,7 +11,7 @@ describe('Create Answers Unit Test', () => {
   })
 
   it('should be able to answer an question', async () => {
-    const answer = await sut.execute({
+    const { answer } = await sut.execute({
       instructorId: '1',
       questionId: '2',
       content: 'Nova Resposta',
