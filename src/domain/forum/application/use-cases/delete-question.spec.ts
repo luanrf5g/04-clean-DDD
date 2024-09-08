@@ -3,6 +3,7 @@ import { DeleteQuestionUseCase } from './delete-question'
 import { makeQuestion } from '@/test/factories/make-question'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { zh_CN } from '@faker-js/faker'
+import { NotAllowedError } from './errors/not-allowed-error'
 
 let questionsRepository: InMemoryQuestionsRepository
 let sut: DeleteQuestionUseCase
@@ -36,11 +37,12 @@ describe('Delete Question Unit Test', () => {
 
     await questionsRepository.create(newQuestion)
 
-    await expect(() => {
-      return sut.execute({
-        authorId: 'author-1',
-        questionId: 'question-1',
-      })
-    }).rejects.toBeInstanceOf(Error)
+    const result = await sut.execute({
+      authorId: 'author-1',
+      questionId: 'question-1',
+    })
+
+    expect(result.isLeft()).toBe(true)
+    expect(result.value).toBeInstanceOf(NotAllowedError)
   })
 })

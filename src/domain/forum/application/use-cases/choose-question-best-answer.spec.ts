@@ -3,6 +3,7 @@ import { InMemoryQuestionsRepository } from '@/test/repositories/in-memory-quest
 import { ChooseQuestionBestAnswerUseCase } from './choose-question-best-answer'
 import { makeQuestion } from '@/test/factories/make-question'
 import { makeAnswer } from '@/test/factories/make-answer'
+import { NotAllowedError } from './errors/not-allowed-error'
 
 let questionsRepository: InMemoryQuestionsRepository
 let answersRepository: InMemoryAnswersRepository
@@ -40,11 +41,12 @@ describe('Choose Question Best Answer Unit Test', () => {
     await questionsRepository.create(question)
     await answersRepository.create(answer)
 
-    await expect(() => {
-      return sut.execute({
-        answerId: answer.id.toString(),
-        authorId: 'authorId',
-      })
-    }).rejects.toBeInstanceOf(Error)
+    const result = await sut.execute({
+      answerId: answer.id.toString(),
+      authorId: 'authorId',
+    })
+
+    expect(result.isLeft()).toBe(true)
+    expect(result.value).toBeInstanceOf(NotAllowedError)
   })
 })

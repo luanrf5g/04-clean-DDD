@@ -3,6 +3,7 @@ import { EditAnswerUseCase } from './edit-answer'
 import { makeAnswer } from '@/test/factories/make-answer'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { unix } from 'dayjs'
+import { NotAllowedError } from './errors/not-allowed-error'
 
 let answersRepository: InMemoryAnswersRepository
 let sut: EditAnswerUseCase
@@ -40,12 +41,13 @@ describe('Edit Answer Unit Test', () => {
 
     await answersRepository.create(newAnswer)
 
-    await expect(() => {
-      return sut.execute({
-        answerId: 'answer-1',
-        authorId: 'author-2',
-        content: 'Resposta Teste',
-      })
-    }).rejects.toBeInstanceOf(Error)
+    const result = await sut.execute({
+      answerId: 'answer-1',
+      authorId: 'author-2',
+      content: 'Resposta Teste',
+    })
+
+    expect(result.isLeft()).toBe(true)
+    expect(result.value).toBeInstanceOf(NotAllowedError)
   })
 })
