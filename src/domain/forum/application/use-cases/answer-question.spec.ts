@@ -1,13 +1,18 @@
+import { InMemoryAnswerAttachmentsRepository } from '@/test/repositories/in-memory-answer-attachments-repository'
 import { AnswerQuestionUseCase } from './answer-question'
 import { InMemoryAnswersRepository } from '@/test/repositories/in-memory-answers-repository'
 
-let inMemoryAnswersRepository: InMemoryAnswersRepository
+let answerAttachmentsRepository: InMemoryAnswerAttachmentsRepository
+let answersRepository: InMemoryAnswersRepository
 let sut: AnswerQuestionUseCase
 
 describe('Create Answers Unit Test', () => {
   beforeEach(() => {
-    inMemoryAnswersRepository = new InMemoryAnswersRepository()
-    sut = new AnswerQuestionUseCase(inMemoryAnswersRepository)
+    answerAttachmentsRepository = new InMemoryAnswerAttachmentsRepository()
+    answersRepository = new InMemoryAnswersRepository(
+      answerAttachmentsRepository,
+    )
+    sut = new AnswerQuestionUseCase(answersRepository)
   })
 
   it('should be able to answer an question', async () => {
@@ -15,9 +20,10 @@ describe('Create Answers Unit Test', () => {
       instructorId: '1',
       questionId: '2',
       content: 'Nova Resposta',
+      attachmentsIds: ['1', '2'],
     })
 
     expect(result.isRight()).toBe(true)
-    expect(inMemoryAnswersRepository.items[0]).toEqual(result.value?.answer)
+    expect(answersRepository.items[0]).toEqual(result.value?.answer)
   })
 })

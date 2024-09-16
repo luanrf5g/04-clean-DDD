@@ -2,15 +2,19 @@ import { InMemoryQuestionsRepository } from '@/test/repositories/in-memory-quest
 import { DeleteQuestionUseCase } from './delete-question'
 import { makeQuestion } from '@/test/factories/make-question'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
-import { zh_CN } from '@faker-js/faker'
 import { NotAllowedError } from './errors/not-allowed-error'
+import { InMemoryQuestionAttachmentsRepository } from '@/test/repositories/in-memory-question-attachments-repository'
 
 let questionsRepository: InMemoryQuestionsRepository
+let questionAttachmentsRepository: InMemoryQuestionAttachmentsRepository
 let sut: DeleteQuestionUseCase
 
 describe('Delete Question Unit Test', () => {
   beforeEach(() => {
-    questionsRepository = new InMemoryQuestionsRepository()
+    questionAttachmentsRepository = new InMemoryQuestionAttachmentsRepository()
+    questionsRepository = new InMemoryQuestionsRepository(
+      questionAttachmentsRepository,
+    )
     sut = new DeleteQuestionUseCase(questionsRepository)
   })
 
@@ -30,6 +34,7 @@ describe('Delete Question Unit Test', () => {
     })
 
     expect(questionsRepository.items).toHaveLength(0)
+    expect(questionAttachmentsRepository.items).toHaveLength(0)
   })
 
   it('should not be able to delete a question from another author', async () => {

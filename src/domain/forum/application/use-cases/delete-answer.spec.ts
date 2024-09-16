@@ -3,13 +3,18 @@ import { DeleteAnswerUseCase } from './delete-answer'
 import { makeAnswer } from '@/test/factories/make-answer'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { NotAllowedError } from './errors/not-allowed-error'
+import { InMemoryAnswerAttachmentsRepository } from '@/test/repositories/in-memory-answer-attachments-repository'
 
+let answerAttachmentsRepository: InMemoryAnswerAttachmentsRepository
 let answersRepository: InMemoryAnswersRepository
 let sut: DeleteAnswerUseCase
 
 describe('Delete Answer Unit Test', () => {
   beforeEach(() => {
-    answersRepository = new InMemoryAnswersRepository()
+    answerAttachmentsRepository = new InMemoryAnswerAttachmentsRepository()
+    answersRepository = new InMemoryAnswersRepository(
+      answerAttachmentsRepository,
+    )
     sut = new DeleteAnswerUseCase(answersRepository)
   })
 
@@ -29,6 +34,7 @@ describe('Delete Answer Unit Test', () => {
     })
 
     expect(answersRepository.items).toHaveLength(0)
+    expect(answerAttachmentsRepository.items).toHaveLength(0)
   })
 
   it('should not be able to delete a answer from another author', async () => {
