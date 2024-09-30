@@ -1,4 +1,8 @@
-# DDD (Domain-driven Design)
+# About this Repository
+
+Repositório iniciado durante o 4º Módulo do curso de NodeJS da RocketSeat, até esta data ( 30 de setembro de 2024 ) foi implementado o conceito de DDD em uma aplicação no estilo de fórum, onde se é criada perguntas onde podem ser comentadas ou respondidas, assim como também escolher uma resposta como a melhor. Neste módulo, o principal fundamento é o desacoplamento de toda o funcionamento da api em relação a parte mais externa do código, da interação direta com banco de dados e client, onde o código consegue funcionar independente da implementação ou não da área mais externa da aplicação.
+
+<!-- # DDD (Domain-driven Design)
 
 Design dirigido à domínio
 
@@ -39,4 +43,4 @@ eCommerce
 
 - Notificação ao cliente
 - Promoções
-- Chat
+- Chat -->
