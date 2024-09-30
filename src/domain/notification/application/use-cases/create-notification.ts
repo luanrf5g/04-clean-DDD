@@ -3,13 +3,13 @@ import { Either, right } from '@/core/either'
 import { Notification } from '../../enterprise/entities/notification'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 
-interface CreateNotificationUseCaseRequest {
+export interface CreateNotificationUseCaseRequest {
   recipientId: string
   title: string
   content: string
 }
 
-type CreateNotificationUseCaseResponse = Either<
+export type CreateNotificationUseCaseResponse = Either<
   null,
   { notification: Notification }
 >
